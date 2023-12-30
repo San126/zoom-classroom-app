@@ -23,15 +23,15 @@ const classSchema = new mongoose.Schema({
   purpose: String,
   duration: Number,
   password: Number,
-  scheduledTime: String,
+  scheduledTime: Date,
 });
 
 const ClassModel = mongoose.model('Class', classSchema);
 
 app.post('/api/classes', async (req, res) => {
-  const reposne = await zoom.createZoomMeeting();
-  const { teacherEmail, studentEmails, scheduledTime } = req.body;
-  const {meetingUrl, purpose, duration, password } = reposne;
+  const { teacherEmail, studentEmails, scheduledTime, duration = 60, topic = "Meet" } = req.body;
+  const reposne = await zoom.createZoomMeeting(topic, duration, scheduledTime);
+  const { meetingUrl = '', purpose = '', password = ''} = reposne ? reposne : {};
 
   const newClass = new ClassModel({
     teacherEmail,
@@ -46,6 +46,16 @@ app.post('/api/classes', async (req, res) => {
   try {
     await newClass.save();
     res.status(201).json(newClass);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/api/schedulelist', async (req, res) => {
+  try {
+    const scheduleList = await ClassModel.find();
+    res.json(scheduleList);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
