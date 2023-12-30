@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import './styles.css';
 import axios from 'axios';
+
+import './styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ScheduleForm = ({ onDataUpdate }) => {
   const [teacherEmail, setTeacherEmail] = useState('');
@@ -33,11 +35,11 @@ const ScheduleForm = ({ onDataUpdate }) => {
   return (
     <div>
       <h5>Schedule Meeting</h5>
-      <form className="px-4 py-3">
+      <form className="px-4 py-3" onSubmit={handleScheduleClass}>
         {/* Teacher's Email */}
         <div className="form-group">
           <label htmlFor="teacherEmail">Teacher's Email:</label>
-          <input type="email" value={teacherEmail} onChange={(e) => setTeacherEmail(e.target.value)} className="form-control" id="teacherEmail" placeholder="Enter teacher's email" required />
+          <input type="email" value={teacherEmail} onChange={(e) => setTeacherEmail(e.target.value)} className="form-control" id="teacherEmail" placeholder="Enter teacher's email" required/>
         </div>
 
         {/* Students' Emails */}
@@ -69,7 +71,7 @@ const ScheduleForm = ({ onDataUpdate }) => {
           <textarea className="form-control" value={topic} onChange={(e) => setTopic(e.target.value)} id="meetTopic" placeholder="Enter meet topic" rows="3" required></textarea>
         </div>
         {/* Schedule Meet Button */}
-        <button type="button" className="btn btn-primary" onClick={handleScheduleClass}>Schedule Meet</button>
+        <button type="submit" className="btn btn-primary">Schedule Meet</button>
       </form>
     </div>
   );
