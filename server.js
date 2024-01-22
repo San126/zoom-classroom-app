@@ -35,6 +35,7 @@ const ClassModel = mongoose.model('Class', classSchema);
 const LoginModal = mongoose.model('Login', loginSchema);
 
 app.post('/api/classes', async (req, res) => {
+  // let reposne = {};
   const { teacherEmail, studentEmails, scheduledTime, duration = 60, topic = "Meet" } = req.body;
   const reposne = await zoom.createZoomMeeting(topic, duration, scheduledTime);
   const { meetingUrl = '', purpose = '', password = '' } = reposne ? reposne : {};

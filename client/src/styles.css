@@ -1,65 +1,106 @@
 /* Custom Styles for Schedule Meeting Form */
 
 body {
-    background-color: #f8f9fa;
-  }
-  
+  background-color: #180c08;
+  background-image: linear-gradient( rgba(3, 40, 48, 0.944) 10%, rgba(74, 18, 6, 0.927) 40%, rgba(5, 68, 30, 0.511)),
+    url("img/chris-montgomery-smgTvepind4-unsplash.jpg");
+  background-size: cover;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.container {
+  color: white;
+  width: 500px;
+  height: 550px;
+  max-width: 500px;
+  max-width: 600px;
+  margin: auto;
+  margin: 70px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(200deg,  rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
+}
+
+h2 {
+  text-align: center;
+  color: #007bff;
+}
+
+.navbar {
+  background-color:#051d26;
+  color: whitesmoke;
+  height: 70px;
+  border-bottom: 1px inset #6c6e6f;
+}
+
+form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  color: #c8cbcd;
+}
+
+input[type="email"],
+input[type="password"],
+textarea,
+input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: transparent;
+  /* rgba(59, 19, 8, .5); */
+  color: whitesmoke;
+  border: 2px outset #180c08;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  background: transparent;
+  color: whitesmoke;
+  /* background-color: rgba(59, 19, 8, .5);
+    border: 1px outset #180c08; */
+}
+
+input[type="email"]::placeholder, input[type="password"]::placeholder {
+  color: hsl(60, 6%, 50%);
+}
+
+input[type="email"]:-webkit-autofill,
+input[type="email"]:-webkit-autofill:hover,
+input[type="email"]:-webkit-autofill:focus,
+input[type="email"]:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: whitesmoke !important;
+}
+
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
   .container {
-    max-width: 600px;
-    margin: auto;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
   }
-  
-  h2 {
-    text-align: center;
-    color: #007bff;
-  }
-  
-  form {
-    margin-top: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    font-weight: bold;
-    color: #495057;
-  }
-  
-  input[type="email"],
-  textarea,
-  input[type="datetime-local"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    color: #ffffff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .container {
-      max-width: 100%;
-    }
-  }
-  
+}
