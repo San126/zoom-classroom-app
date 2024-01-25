@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
@@ -9,36 +9,44 @@ import './styles.css';
 const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [loginStatus, setLoginStatus] = useState(''); //success if successfully logged in logging in if trird loggin but not successful yet, unsuccessful if tried and failed 
+    const [userDetails, setUserDetails] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         try {
-            const details = callApi(e);
             e.preventDefault();
-            navigate('/schedule');
-            console.log('Class scheduled successfully:', details.data);
-        } catch (error) {
-            console.error('Error while login', error);
-        }
-    };
-
-    const callApi = async (e) => {
-        try {
+            setLoginStatus("logging in");
             const response = await axios.post('http://localhost:3001/api/login', {
                 username,
                 password
+            }).then(() => {
+                // e.preventDefault();
+                navigate('/schedule');
+                setLoginStatus('success');
+                setUserDetails(response.data);
+                console.log('Class scheduled successfully:', response.data);
+            }).catch((error) => {
+                setLoginStatus('unsuccessful');
+                // alert(error.response.data.message);
+                console.log('Error while login', error.response.data.message);
             });
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Error while login', error);
         }
     }
-    return (
-        <div className="container">
 
+    return (
+        <div className='login'>
+        <div className="container sm">
             <div className="card-header">
                 <h3 className="text-center">Login</h3>
             </div>
             <div className="card-body">
+                {loginStatus === 'unsuccessful' && <div className='alert alert-danger'>
+                    Invalid username or password!
+                </div>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email address</label>
@@ -74,6 +82,8 @@ const LoginForm = () => {
                         <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login</button>
                     </div>
                 </form>
+            </div>
+            <div class="signup"><p><a href="./signup">Create an account</a></p></div>
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ const TableContent = (props) => {
 
     return (
         <div>
-            <table className="table table-striped table-sm" id="dataTable">
+            {/* <table className="table table-striped table-sm" id="dataTable">
                 <thead>
                     <tr>
                         <th scope="col">Teacher:</th>
@@ -34,7 +34,7 @@ const TableContent = (props) => {
             {(count === 0) &&
                 <div className="alert alert-warning" role="alert">
                     No data found!
-                </div>}
+                </div>} */}
         </div>
     );
 };

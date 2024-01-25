@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 var cors = require('cors');
-const zoom = require('./client/src/zoom')
+const zoom = require('./client/src/zoom');
+const { isElement, isEmpty, isNull } = require('lodash');
 
 const app = express();
 const port = 3001;
@@ -59,8 +60,8 @@ app.post('/api/classes', async (req, res) => {
   }
 });
 
-app.post('/api/login', async (req, res) => {
-  const { userName = "", password = "" } = req.body;
+app.post('/api/signup', async (req, res) => {
+  const { username: userName = "", password = "" } = req.body;
 
   const newLogin = new LoginModal({
     userName,
@@ -75,6 +76,41 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.post('/api/login', async (req, res) => {
+  const { username: userName, password } = req.body;
+  const userDetails = await LoginModal.findOne({ userName, password });
+  console.log(typeof (userDetails), !isEmpty(userDetails));
+  if (isEmpty(userDetails) === false) {
+    console.log(userDetails, userName, password);
+    const newLogin = new LoginModal({
+      userName,
+      password
+    });
+    res.status(201).json({ message: "User Logged in Successfully", newLogin })
+  }
+  else {
+    console.log("yes");
+    res.status(404).send({ message: "User not exists please Sign up and then log in" });
+  }
+});
+
+// app.get('/api/userdetails', async (req, res) => {
+//   try {
+//     const { username:userName, password } = req.body;
+//     const userDetails = await LoginModal.findOne({ userName, password });
+//     if (!isEmpty(userDetails)) {
+//       res.status(201).json({ message: "User Logged in Successfully", userDetails })
+//     }
+//     else {
+//       const errorStatus = new Error("User not exists please Sign up and then log in");
+//       res.json(errorStatus);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
 
 app.get('/api/schedulelist', async (req, res) => {
   try {
