@@ -9,11 +9,23 @@ import ScheduleForm from './ScheduleForm';
 import './styles.css';
 
 const App = () => {
-  const [formVisibility, setFormVisibility] = useState();
+  const [formVisibility, setFormVisibility] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
 
-  const handleClose = () => {
-    setFormVisibility(!formVisibility);
-  }
+  const setDetails = (data) => {
+    console.log(data)
+    console.log('Data received from child:', data);
+    setUserDetails(data);
+  };
+
+  const handleModalVisibility = (value) => {
+    if (value){
+    setFormVisibility(value);
+    }
+    else{
+      setFormVisibility(!formVisibility);
+    }
+  };
 
   return (
     <>
@@ -36,15 +48,15 @@ const App = () => {
             </span>
           </span>
         </nav>
-        <div><ScheduleForm aria_hidden={formVisibility} handleClose={handleClose} /></div>
+        <div><ScheduleForm showModal={formVisibility} handleVisibility={handleModalVisibility}/></div>
       </div>
       <Router>
         <Routes>
-          {/* Default route for the login page */}
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm sendData={setDetails} />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/schedule" element={<ClassRoom />} />
-          {/* <Route path="/demo" element={<ScheduleForm aria_hidden={formVisibility} handleClose={handleClose} />} /> */}
+          <Route path="/schedule" element={<ClassRoom props={userDetails} showModal={formVisibility} />} />
+          {/* <Route path="/schedule" element={(props)=>{<ClassRoom handleClose={handleClose} aria_hidden={aria_hidden} {...props} />}}/> */}
+
         </Routes>
       </Router>
     </>

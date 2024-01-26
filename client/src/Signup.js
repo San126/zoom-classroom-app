@@ -5,12 +5,12 @@ import axios from 'axios';
 
 import './styles.css';
 
-//demo login page not active
-const LoginForm = () => {
+//ssignup pages
+const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState(''); //success if successfully logged in logging in if trird loggin but not successful yet, unsuccessful if tried and failed 
+    const [loginStatus, setLoginStatus] = useState(''); 
     const [userDetails, setUserDetails] = useState('');
     const navigate = useNavigate();
 
@@ -21,13 +21,11 @@ const LoginForm = () => {
                 username,
                 password
             }).then(() => {
-                // e.preventDefault();
                 navigate('/');
-                // setLoginStatus('success');
-                // setUserDetails(response.data);
                 alert("Signed up successfully. Login now.");
                 console.log('Signed up successfully:');
             }).catch((error) => {
+                alert(error.response.data.message);
                 console.log('Error while login', error);
             });
         }
@@ -86,10 +84,9 @@ const LoginForm = () => {
                                 onChange={(e) => setConfirmedPassword(e.target.value)}
                                 required
                             />
-                            {/* {confirmedPassword !== password || confirmedPassword === '' && <div className="invalid-feedback">Please retype the password correctly</div>} */}
                         </div>
                         <div className="d-grid">
-                            <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login</button>
+                            <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Sign Up</button>
                         </div>
                     </form>
                 </div>
@@ -98,4 +95,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default Signup;

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { Button, Modal, Form } from 'react-bootstrap';
 
 import './styles.css';
+import { upperCase } from 'lodash';
 
-const ScheduleForm = ({ aria_hidden, handleClose }) => {
+// only design is completed
+const ScheduleForm = ({ showModal, handleVisibility, props }) => {
   const [teacherEmail, setTeacherEmail] = useState('');
   const [studentEmails, setStudentEmails] = useState('');
   const [zoomLink, setZoomLink] = useState('');
@@ -12,13 +15,15 @@ const ScheduleForm = ({ aria_hidden, handleClose }) => {
   const [duration, setDuration] = useState(0);
   const [topic, setTopic] = useState('');
   const [classes, setClasses] = useState([]);
-  const [showModal, setShowModal] = useState();
+  const [dateValueError, setDateValueError] = useState(false);
+  const [details, setDetails] = useState(props);
+  const [formVisibility, setFormVisibility]=useState();
 
   const onDataUpdate = {};
 
   const handleScheduleClass = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/api/classes', {
+      const response = await axios.post('http://localhost:3001/api/schedule', {
         teacherEmail,
         studentEmails: studentEmails.split(',').map((email) => email.trim()),
         zoomLink,
@@ -34,8 +39,22 @@ const ScheduleForm = ({ aria_hidden, handleClose }) => {
     }
   };
 
+  const isValidScheduledTime = (value) => {
+    console.log(value);
+    const today = moment();
+    // if (isBefore(value,today)) {
+    //   setDateValueError(true);
+    // }
+  }
+
+  const setVisibility =() =>{
+    console.log(showModal);
+    setFormVisibility(!showModal);
+    handleVisibility(false);
+  }
+
   return (
-    <Modal show={aria_hidden ? aria_hidden : showModal} onHide={handleClose}>
+    <Modal show={formVisibility||showModal} onHide={setVisibility}>
       <Modal.Header className='modalHeader' closeButton>
         <Modal.Title className='modalTitle'>Schedule Meet</Modal.Title>
       </Modal.Header>
@@ -43,7 +62,7 @@ const ScheduleForm = ({ aria_hidden, handleClose }) => {
         <Form class="modalForm" action="">
           <div className="form-group">
             <label htmlFor="teacherEmail">Teacher's Email:</label>
-            <input type="email" value={teacherEmail} onChange={(e) => setTeacherEmail(e.target.value)} className="form-control" id="teacherEmail" placeholder="Enter teacher's email" required />
+            <input type="email" value={teacherEmail} onChange={(e) => setTeacherEmail(details.userName)} className="form-control" id="teacherEmail" placeholder="Enter teacher's email" required />
           </div>
 
           {/* Students' Emails */}
@@ -55,8 +74,11 @@ const ScheduleForm = ({ aria_hidden, handleClose }) => {
           {/* Schedule Date and Time */}
           <div className="form-group">
             <label htmlFor="scheduleDateTime">Schedule Date and Time:</label>
-            <input type="datetime-local" value={scheduledTime} onChange={(e) => setScheduledTime(e.target.value)} className="form-control" id="scheduleDateTime" required />
+            <input type="datetime-local" value={scheduledTime} onChange={(e) => isValidScheduledTime(e.target.value)} className="form-control" id="scheduleDateTime" required />
           </div>
+          {dateValueError && <div className="invalid-feedback">
+            Please choose a valid date and time
+          </div>}
 
           {/* Set Duration */}
           <div className="form-group">
@@ -66,6 +88,8 @@ const ScheduleForm = ({ aria_hidden, handleClose }) => {
               className="form-control"
               id="duration"
               value={duration}
+              min="30"
+              max="300"
               onChange={(e) => setDuration(e.target.value)}
             />
           </div>
@@ -76,8 +100,8 @@ const ScheduleForm = ({ aria_hidden, handleClose }) => {
           </div>
         </Form>
         <Modal.Footer className='modalFooter'>
-          <span><button type="button" class="btn btn-primary">Save changes</button></span>
-          <span><button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={handleClose}>Close</button></span>
+          <span><button type="button" class="btn btn-primary" onClick={handleScheduleClass}>Schedule Meet</button></span>
+          <span><button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={setVisibility}>Cancel</button></span>
         </Modal.Footer>
       </Modal.Body>
     </Modal >

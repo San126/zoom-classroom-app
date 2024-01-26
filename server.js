@@ -21,21 +21,20 @@ const classSchema = new mongoose.Schema({
   teacherEmail: String,
   studentEmails: [String],
   meetingUrl: String,
-  purpose: String,
   duration: Number,
   password: Number,
   scheduledTime: Date,
 });
 
 const loginSchema = new mongoose.Schema({
-  userName: String,
-  password: String
+  userName: { type: String, unique: true, required: true },
+  password: { type: String, required: true }
 });
 
 const ClassModel = mongoose.model('Class', classSchema);
 const LoginModal = mongoose.model('Login', loginSchema);
 
-app.post('/api/classes', async (req, res) => {
+app.post('/api/schedule', async (req, res) => {
   // let reposne = {};
   const { teacherEmail, studentEmails, scheduledTime, duration = 60, topic = "Meet" } = req.body;
   const reposne = await zoom.createZoomMeeting(topic, duration, scheduledTime);
@@ -61,56 +60,40 @@ app.post('/api/classes', async (req, res) => {
 });
 
 app.post('/api/signup', async (req, res) => {
-  const { username: userName = "", password = "" } = req.body;
-
-  const newLogin = new LoginModal({
-    userName,
-    password
-  });
-
   try {
-    await newLogin.save();
-    res.status(201).json(newLogin);
+    const { username: userName = "", password = "" } = req.body;
+
+    const newSignup = new LoginModal({
+      userName,
+      password
+    });
+
+    await newSignup.save();
+    res.status(201).json(newSignup);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    if (error.code === 11000) {
+      res.status(409).send({ message: "Username already exists please choose another username" });
+      console.error(error);
+    }
+    else {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 });
 
 app.post('/api/login', async (req, res) => {
   const { username: userName, password } = req.body;
   const userDetails = await LoginModal.findOne({ userName, password });
-  console.log(typeof (userDetails), !isEmpty(userDetails));
-  if (isEmpty(userDetails) === false) {
+  console.log(isEmpty(userDetails) === false);
+  if (userDetails) {
     console.log(userDetails, userName, password);
-    const newLogin = new LoginModal({
-      userName,
-      password
-    });
-    res.status(201).json({ message: "User Logged in Successfully", newLogin })
+    res.status(201).json({ message: "User Logged in Successfully", userDetails })
   }
   else {
     console.log("yes");
     res.status(404).send({ message: "User not exists please Sign up and then log in" });
   }
 });
-
-// app.get('/api/userdetails', async (req, res) => {
-//   try {
-//     const { username:userName, password } = req.body;
-//     const userDetails = await LoginModal.findOne({ userName, password });
-//     if (!isEmpty(userDetails)) {
-//       res.status(201).json({ message: "User Logged in Successfully", userDetails })
-//     }
-//     else {
-//       const errorStatus = new Error("User not exists please Sign up and then log in");
-//       res.json(errorStatus);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
 
 app.get('/api/schedulelist', async (req, res) => {
   try {

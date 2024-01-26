@@ -39,6 +39,13 @@ body::-webkit-scrollbar {
   background: linear-gradient(200deg, rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
 }
 
+.welcome {
+  padding: 10px;
+  color: rgba(237, 229, 229, 0.933);
+  margin: 5px auto;
+  font-family: Calibri, sans-serif;
+}
+
 .modalHeader,
 .modalBody {
   background: linear-gradient(90deg, rgba(3, 40, 48, 0.944) 35%, rgba(129, 53, 34, 0.403));
@@ -88,7 +95,8 @@ span {
 svg {
   width: 20px;
   height: 20px;
-  pointer-events: none;
+  cursor: pointer;
+  pointer-events: all;
 }
 
 svg path {
@@ -107,14 +115,16 @@ svg path {
 }
 
 .table {
-  width: 100%;
+  width: 97%;
   margin: 70px auto;
+  border: 2px solid #6c6e6f;
 }
 
 th,
 td {
   background: linear-gradient(90deg, rgba(229, 67, 26, 0.219), rgba(74, 28, 17, 0.316));
   background-color: rgba(0, 0, 0, 0.926) !important;
+  border: 2px solid #6c6e6f;
 }
 
 tr {
@@ -129,7 +139,7 @@ tr {
   color: rgb(188, 188, 188);
 }
 
-tr:hover {
+.trow:hover {
   background-color: rgba(228, 225, 225, 02);
   border: 3px solid #eef2f6
 }
@@ -148,7 +158,7 @@ tr {
   color: whitesmoke;
 }
 
-.thead {
+thead {
   height: 50px;
 }
 
