@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -10,14 +10,14 @@ const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState(''); 
+    const [loginStatus, setLoginStatus] = useState('');
     const [userDetails, setUserDetails] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post('http://localhost:3001/api/signup', {
+            const response = await axios.post('http://localhost:3001/auth/signup', {
                 username,
                 password
             }).then(() => {
@@ -89,6 +89,7 @@ const Signup = () => {
                             <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Sign Up</button>
                         </div>
                     </form>
+                    <div class="link"><p><a href='/'>Login</a></p></div>
                 </div>
             </div>
         </div>

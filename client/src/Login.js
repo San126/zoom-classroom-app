@@ -19,19 +19,23 @@ const LoginForm = ({ sendData }) => {
         try {
             e.preventDefault();
             setLoginStatus("logging in");
-            const response = await axios.post('http://localhost:3001/api/login', {
+            const response = await axios.post('http://localhost:3001/auth/login', {
                 username,
                 password
             });
-                navigate('/schedule');
-                setLoginStatus('success');
-                sendData(response.data);
-                setUserDetails(response.data);
-                console.log('Class scheduled successfully:', response.data);      
+            navigate('/schedule');
+            setLoginStatus('success');
+            sendData(response.data);
+            setUserDetails(response.data);
+            console.log('Class scheduled successfully:', response.data);
         }
         catch (error) {
-            setLoginStatus('unsuccessful');
+            if (error.response?.status === 401) {
+                setLoginStatus('unsuccessful');
+            }
+            else {
                 alert(error.response.data.message);
+            }
             console.error('Error while login', error);
         }
     }
@@ -82,7 +86,7 @@ const LoginForm = ({ sendData }) => {
                         </div>
                     </form>
                 </div>
-                <div class="signup"><p><a href="./signup">Create an account</a></p></div>
+                <div class="link"><p><a href="./signup">Create an account</a></p></div>
             </div>
         </div>
     );

@@ -261,12 +261,12 @@ div .alert {
   position: relative;
 }
 
-div .signup {
+div .link{
   text-align: center;
   padding: 35px;
 }
 
-.signup a {
+.link a {
   color: rgb(208, 204, 204);
 }
 

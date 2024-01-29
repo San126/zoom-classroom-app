@@ -8,7 +8,7 @@ import { upperCase } from 'lodash';
 
 // only design is completed
 const ScheduleForm = ({ showModal, handleVisibility, props }) => {
-  const [teacherEmail, setTeacherEmail] = useState('');
+  // const [teacherEmail, setTeacherEmail] = useState('');
   const [studentEmails, setStudentEmails] = useState('');
   const [zoomLink, setZoomLink] = useState('');
   const [scheduledTime, setScheduledTime] = useState('');
@@ -18,13 +18,15 @@ const ScheduleForm = ({ showModal, handleVisibility, props }) => {
   const [dateValueError, setDateValueError] = useState(false);
   const [details, setDetails] = useState(props);
   const [formVisibility, setFormVisibility]=useState();
+  const {userName=""} =details?details:{};
 
   const onDataUpdate = {};
+  console.log(details)
 
   const handleScheduleClass = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/api/schedule', {
-        teacherEmail,
+      const response = await axios.post('http://localhost:3001/auth/schedule', {
+        userName,
         studentEmails: studentEmails.split(',').map((email) => email.trim()),
         zoomLink,
         scheduledTime,
@@ -62,7 +64,7 @@ const ScheduleForm = ({ showModal, handleVisibility, props }) => {
         <Form class="modalForm" action="">
           <div className="form-group">
             <label htmlFor="teacherEmail">Teacher's Email:</label>
-            <input type="email" value={teacherEmail} onChange={(e) => setTeacherEmail(details.userName)} className="form-control" id="teacherEmail" placeholder="Enter teacher's email" required />
+            <input type="email" value={userName} className="form-control" id="teacherEmail" placeholder={userName} required />
           </div>
 
           {/* Students' Emails */}

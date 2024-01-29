@@ -13,7 +13,7 @@ const ClassRoom = ({ props, showModal }) => {
 
     useEffect(() => {
         // Fetch data from the server
-        fetch('http://localhost:3001/api/schedulelist')
+        fetch('http://localhost:3001/auth/schedulelist')
             .then(response => response.json())
             .then(data => setClasses([...classes, ...data]))
             .catch(error => console.error('Error fetching data:', error));
