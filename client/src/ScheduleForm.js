@@ -1,40 +1,34 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Modal, Form } from 'react-bootstrap';
 
 import './styles.css';
-import { upperCase } from 'lodash';
 
-// only design is completed
-const ScheduleForm = ({ showModal, handleVisibility, props }) => {
-  // const [teacherEmail, setTeacherEmail] = useState('');
+const ScheduleForm = ({ showModal, handleVisibility, reloadPage, props }) => {
   const [studentEmails, setStudentEmails] = useState('');
-  const [zoomLink, setZoomLink] = useState('');
   const [scheduledTime, setScheduledTime] = useState('');
   const [duration, setDuration] = useState(0);
   const [topic, setTopic] = useState('');
   const [classes, setClasses] = useState([]);
   const [dateValueError, setDateValueError] = useState(false);
-  const [details, setDetails] = useState(props);
-  const [formVisibility, setFormVisibility]=useState();
-  const {userName=""} =details?details:{};
+  const { username: userName = "" } = props||{};
 
   const onDataUpdate = {};
-  console.log(details)
 
   const handleScheduleClass = async () => {
     try {
       const response = await axios.post('http://localhost:3001/auth/schedule', {
-        userName,
+        scheduledBy:userName,
         studentEmails: studentEmails.split(',').map((email) => email.trim()),
-        zoomLink,
         scheduledTime,
         duration,
         topic
       });
+      handleVisibility(false);
       setClasses([...classes, response.data]);
-      onDataUpdate(response.data)
+      // onDataUpdate(response.data);
+      reloadPage();
       console.log('Class scheduled successfully:', response.data);
     } catch (error) {
       console.error('Error scheduling class:', error);
@@ -44,23 +38,21 @@ const ScheduleForm = ({ showModal, handleVisibility, props }) => {
   const isValidScheduledTime = (value) => {
     console.log(value);
     const today = moment();
-    // if (isBefore(value,today)) {
-    //   setDateValueError(true);
-    // }
+    setScheduledTime(value);
+
   }
 
-  const setVisibility =() =>{
+  const setVisibility = () => {
     console.log(showModal);
-    setFormVisibility(!showModal);
-    handleVisibility(false);
+    handleVisibility(!showModal);
   }
 
   return (
-    <Modal show={formVisibility||showModal} onHide={setVisibility}>
+    <Modal show={showModal} onHide={setVisibility} size='sm'>
       <Modal.Header className='modalHeader' closeButton>
         <Modal.Title className='modalTitle'>Schedule Meet</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="modalBody">
+      <Modal.Body className="modalBody" >
         <Form class="modalForm" action="">
           <div className="form-group">
             <label htmlFor="teacherEmail">Teacher's Email:</label>

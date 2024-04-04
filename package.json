@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "netlify deploy --prod"
   },
   "keywords": [],
   "author": "",
@@ -18,12 +19,15 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "mongoose": "^8.0.3",
+    "netlify-cli": "^17.21.1",
+    "netlify-lambda": "^2.0.16",
     "react-router-dom": "^6.21.1",
+    "serverless-http": "^3.2.0",
     "sqlite3": "^5.1.6"
   }
 }

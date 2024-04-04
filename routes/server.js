@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment');
 const router = express.Router()
 
 const { hash, compare } = require('bcryptjs');
@@ -45,19 +46,19 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/schedule', async (req, res) => {
-  // let reposne = {};
-  const { teacherEmail, studentEmails, scheduledTime, duration = 60, topic = "Meet" } = req.body;
+  const { scheduledBy, studentEmails, scheduledTime, duration = 60, topic = "Meet" } = req.body;
   const reposne = await zoom.createZoomMeeting(topic, duration, scheduledTime);
   const { meetingUrl = '', purpose = '', password = '' } = reposne ? reposne : {};
 
   const newClass = new ClassModel({
-    teacherEmail,
-    studentEmails,
+    participants: {studentEmails},
     meetingUrl,
     purpose,
     duration,
     password,
     scheduledTime,
+    scheduledBy,
+    scheduledAt: moment()
   });
 
   try {
@@ -84,10 +85,10 @@ router.post('/login', async (req, res) => {
 
     userDetails.refreshToken = refreshToken;
     await userDetails.save();
-    // res.status(201).json({ message: "User Logged in Successfully", userDetails });
 
     sendRefreshToken(res, refreshToken);
     sendAccessToken(req, res, accessToken);
+    // return res.status(201).json({ message: "User Logged in Successfully", userDetails });
   }
   else {
     res.status(404).send({ message: "User not exists please Sign up and then log in" });
@@ -96,8 +97,15 @@ router.post('/login', async (req, res) => {
 
 router.get('/schedulelist', async (req, res) => {
   try {
-    const scheduleList = await ClassModel.find();
-    res.json(scheduleList);
+    console.log(req.query.userName)
+    if (req.query) {
+      const scheduleList = await ClassModel.find({ scheduledBy: req.query.userName });
+      return res.json(scheduleList);
+    }
+    return res.status(500).json({
+      message: 'You are not logged in! 😢',
+      type: 'error',
+    })
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

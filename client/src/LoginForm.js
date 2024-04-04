@@ -1,36 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
-
 import './styles.css';
+
 import NavbarContents from './NavbarContents';
 
-//ssignup pages
-const Signup = () => {
+//demo login page not active
+const LoginForm = ({ sendData }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmedPassword, setConfirmedPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState('');
+    const [loginStatus, setLoginStatus] = useState(''); //success if successfully logged in logging in if trird loggin but not successful yet, unsuccessful if tried and failed 
     const [userDetails, setUserDetails] = useState('');
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post('http://localhost:3001/auth/signup', {
+            setLoginStatus("logging in");
+            const response = await axios.post('http://localhost:3001/auth/login', {
                 username,
                 password
-            }).then(() => {
-                navigate('/');
-                alert("Signed up successfully. Login now.");
-                console.log('Signed up successfully:');
-            }).catch((error) => {
-                alert(error.response.data.message);
-                console.log('Error while login', error);
             });
+            navigate('/schedulelist');
+            setLoginStatus('success');
+            sendData(response.config.data);
+            localStorage.setItem('user', response.config.data);
+            console.log(response.config.data)
+            // setUserDetails(response.config.data);
+            console.log('Logged in successfully:', response.config.data);
         }
         catch (error) {
+            if (error.response?.status === 401) {
+                setLoginStatus('unsuccessful');
+            }
+            else {
+                alert(error.response.data.message);
+            }
             console.error('Error while login', error);
         }
     }
@@ -41,12 +48,15 @@ const Signup = () => {
             <div className='login'>
                 <div className="container sm">
                     <div className="card-header">
-                        <h3 className="text-center">Sign Up</h3>
+                        <h3 className="text-center">Login</h3>
                     </div>
                     <div className="card-body">
+                        {loginStatus === 'unsuccessful' && <div className='alert alert-danger'>
+                            Invalid username or password!
+                        </div>}
                         <form onSubmit={handleSubmit}>
                             <div className="mb-3">
-                                <label htmlFor="email" className="form-label">Enter Email address</label>
+                                <label htmlFor="email" className="form-label">Email address</label>
                                 <input
                                     type="email"
                                     className="form-control"
@@ -75,29 +85,16 @@ const Signup = () => {
                                     Please choose a password.
                                 </div>
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="confirmedpassword" className="form-label">Confirm Password</label>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    id="confirmedpassword"
-                                    placeholder="Re-enter the password"
-                                    pattern={password}
-                                    value={confirmedPassword}
-                                    onChange={(e) => setConfirmedPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
                             <div className="d-grid">
-                                <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Sign Up</button>
+                                <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login</button>
                             </div>
                         </form>
-                        <div class="link"><p><a href='/'>Login</a></p></div>
                     </div>
+                    <div class="link"><p><a href="./signup">Create an account</a></p></div>
                 </div>
             </div>
         </>
     );
 };
 
-export default Signup;
+export default LoginForm;

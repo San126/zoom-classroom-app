@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 const { Schema, model } = require("mongoose");
 
 const classSchema = new Schema({
-  teacherEmail: String,
-  studentEmails: [String],
-  meetingUrl: String,
-  duration: Number,
-  password: Number,
-  scheduledTime: Date,
+  participants: { type: Object, required: true },
+  meetingUrl: { type: String, required: true },
+  duration: { type: Number,  required: true },
+  password: { type: Number,  required: true },
+  purpose: { type: String,  required: true },
+  scheduledTime: { type: Date,  required: true },
+  scheduledBy: String,
+  scheduledAt: Date
 });
 
 const loginSchema = new Schema({
