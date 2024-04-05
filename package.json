@@ -6,7 +6,7 @@
   "scripts": {
     "netlify": "netlify",
     "start": "react-scripts start",
-    "build": "react-scripts build --public-url ./client/public",
+    "build": "react-scripts build --public-url ./client",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
