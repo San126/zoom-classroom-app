@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"  # The command to build your React app
-  publish = "build"          # The directory to deploy (where your built React files are located)
+  publish = "client"         # The directory to deploy (where your built React files are located)
   functions = "functions"    # Optional: If you have serverless functions, specify the directory here
 
 [[redirects]]               # Optional: Redirect rules
