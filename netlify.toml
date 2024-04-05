@@ -1,2 +1,14 @@
 [build]
-    functions = "functions"
+  command = "npm run build"  # The command to build your React app
+  publish = "client/public"         # The directory to deploy (where your built React files are located)
+  functions = "functions"    # Optional: If you have serverless functions, specify the directory here
+
+[[redirects]]               # Optional: Redirect rules
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]                 # Optional: Custom headers
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
