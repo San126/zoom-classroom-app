@@ -1,13 +1,10 @@
-/* Custom Styles for Schedule Meeting Form */
-
 body {
-  /* overflow-y: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none; */
   margin: 0;
   padding: 0;
   height: auto;
-  overflow: scroll
+  overflow: hide;
+  background-size: cover;
+  background-color:cadetblue ;
 }
 
 body::-webkit-scrollbar {
@@ -18,23 +15,29 @@ body::-webkit-scrollbar {
   display: flex;
   height: 100vh;
   max-width: 100vw;
-  background-color: #180c08;
-  background-image: linear-gradient(rgba(3, 40, 48, 0.944) 10%, rgba(74, 18, 6, 0.927) 40%, rgba(5, 68, 30, 0.511)),
+  background-color: #0d1b2a;
+  background-image: linear-gradient(rgba(3, 40, 48, 0.8) 10%, rgba(13, 28, 47, 0.8) 40%, rgba(5, 68, 94, 0.5)),
     url("img/chris-montgomery-smgTvepind4-unsplash.jpg");
   background-size: cover;
   padding: 0;
   margin: 0;
   justify-content: center;
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 
 .login::-webkit-scrollbar {
   display: none;
 }
 
+.login .btn {
+  background-color: #d18d00 !important;
+  border: 1px solid #573c04;
+}
+
 .container {
-  color: white;
+  color: #ffcc00;
+  /* Amber yellow */
   position: absolute;
   width: 500px;
   height: 550px;
@@ -42,23 +45,24 @@ body::-webkit-scrollbar {
   max-height: 550px;
   margin: 70px auto;
   padding: 20px;
-  border: 1px inset rgba(74, 18, 6, 0.927);
+  border: 1px inset #ffcc00;
+  /* Amber yellow */
   border-radius: 8px;
   box-shadow: 0 10px 8px rgba(0, 0, 0, 0.5);
-  background: linear-gradient(200deg, rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
+  background-color: rgb(13, 28, 47);
 }
 
 .scheduledetails .welcome {
-  padding: 70px 30px 5px 30px;
-  color: rgba(237, 229, 229, 0.933);
-  margin: 5px auto;
+  padding: 150px 30px 5px 30px;
+  color: #ffcc00 !important;
   font-family: Calibri, sans-serif;
+  height: auto;
 }
 
 .modalHeader,
 .modalBody {
-  background: linear-gradient(90deg, rgba(3, 40, 48, 0.944) 35%, rgba(129, 53, 34, 0.403));
-  background-color: rgba(0, 0, 0, 0.926) !important;
+  background: linear-gradient(to bottom, #431f57a3, #210733) !important;
+  background-color: #3b1554 !important;
   color: whitesmoke;
 }
 
@@ -71,15 +75,62 @@ body::-webkit-scrollbar {
 }
 
 .modalForm {
-  background: linear-gradient(200deg, rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
+  background: linear-gradient(to bottom, #431f57a3, #210733) !important;
 }
 
-.modalFooter {
-  margin-bottom: 20px;
+.modalForm .row {
+  margin-bottom: 9px;
+}
+
+.modalFooter, .modalFooter.modal-foot {
+  background-color:  #210733 !important;
+}
+
+.modalBody .form-control {
+  border-color: #ffcc00;
+  border-radius: 4px;
+}
+
+.modalBody .form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.modalBody .invalid-feedback {
+  color: #dc3545;
+  display: block;
+}
+
+/* Specific styling for email errors */
+.modalBody .email-error {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.error-badge {
+  background-color: #ffcc00;
+  color: #0d1b2a;
+  padding: 10px 15px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.error-icon {
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.error-message {
+  font-weight: bold;
 }
 
 .btn-close {
-  color: black;
+  color: #0d1b2a;
+  /* Dark navy blue */
 }
 
 .btn-close:hover {
@@ -94,10 +145,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .nav-design {
   display: flex;
 }
-
-/* a .nav-link{
-  iconcolor: whitesmoke;
-} */
 
 span {
   margin: 10px;
@@ -116,41 +163,6 @@ svg path {
   pointer-events: all;
 }
 
-/* svg >div> button {
-  pointer-events: none;
-} */
-
-/* .dropdown {
-  position: relative;
-  display: inline-block;
-} */
-
-/* .dropdown-button {
-  background-color: #3498db;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-} */
-
-/* Style for the dropdown content */
-/* .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-} */
-
-/* Style for the dropdown items */
-/* .dropdown-item {
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  color: #333;
-} */
-
 .dropdownmenu {
   display: inline-block;
   background-color: transparent;
@@ -164,16 +176,15 @@ svg path {
   padding: 0px;
   text-decoration: none;
   content: "";
-  
 }
 
 .dropdownToggle:after {
-  display: none !important; 
-  background-color: transparent !important; 
+  display: none !important;
+  background-color: transparent !important;
 }
 
 .dropdownToggle:hover {
-  background-color: transparent !important; 
+  background-color: transparent !important;
 }
 
 .dropdownmenu .btn-primary {
@@ -181,85 +192,126 @@ svg path {
   margin-bottom: 4px;
 }
 
-.dropdownmenu {
+.dropdown-menu {
+  border: 1px solid gray;
   cursor: pointer;
+  background-color: black;
+  color: whitesmoke;
 }
 
 .menuItem {
   padding: 0px 8px;
+  background-color: black;
 }
 
 .scheduledetails {
-  background: linear-gradient(90deg, rgba(3, 40, 48, 0.944) 20%, rgba(106, 23, 4, 0.927) 70%, rgba(3, 64, 27, 0.686));
+  /* background: linear-gradient(180deg, rgba(6, 99, 119, 0.8), rgba(2, 71, 87, 0.8) 20%, rgba(12, 51, 103, 0.9) 70%); */
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   max-width: 100%;
   justify-content: center;
   align-items: center;
   padding: 90px auto;
-  /* margin: 50px auto; */
 }
 
 .table {
-  width: 97%;
+  width: 80%;
   margin: 40px auto;
-  border: 2px solid #6c6e6f;
+  /* width: 100%; */
+  overflow-y: auto;
+  border: none
+}
+
+@keyframes unfold {
+  from {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+  }
+
+  to {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 1;
+  }
+}
+
+td {
+  animation: unfold 2s !important;
 }
 
 th,
 td {
-  background: linear-gradient(90deg, rgba(229, 67, 26, 0.219), rgba(74, 28, 17, 0.316));
-  background-color: rgba(0, 0, 0, 0.926) !important;
-  border: 2px solid #6c6e6f;
+  padding: 15px auto !important;
+}
+
+th {
+  background-color: #000000 !important;
+  color: #ffcc00 !important;
+  text-align: center;
+  border: none !important;
+  animation: unfold 1s !important;
+}
+
+td {
+  background-color: #0d1b2a !important;
+  /* Dark navy blue */
+  color: whitesmoke;
+  /* White text */
+  border: none !important;
+}
+
+tr:nth-child(even) td {
+  background-color: #0d1b2a !important;
 }
 
 tr {
-  height: 80px
+  height: 80px;
+  opacity: 0;
+  animation: unfold 0.5s forwards !important;
 }
 
-.scheduledetails th {
-  color: whitesmoke;
-}
-
-.scheduledetails td {
-  color: rgb(188, 188, 188);
-}
-
-.trow:hover {
-  background-color: rgba(228, 225, 225, 02);
-  border: 3px solid #eef2f6
-}
-
-.scheduledetails td a {
-  color: rgb(188, 188, 188);
-}
-
-.scheduledetails td a:hover {
-  color: white;
-}
-
-th,
-td,
-tr {
-  color: whitesmoke;
-  height: 20px;
+tr:hover {
+  background-color: rgba(228, 225, 225, 0.2) !important;
+  /* border: 3px solid #eef2f6; */
 }
 
 thead {
   height: 50px;
 }
 
+.scheduledetails th,
+.scheduledetails td {
+  color: whitesmoke;
+  /* White text */
+}
+
+.scheduledetails td a {
+  color: whitesmoke;
+  /* White text */
+}
+
+.scheduledetails td a:hover {
+  color: #ffcc00;
+  /* Amber yellow text on hover */
+}
+
 h2 {
   text-align: center;
-  color: #007bff;
+  color: #ffcc00;
+  /* Amber yellow */
 }
 
 .navbar {
-  background-color: #051d26;
+  position: fixed;
+  background-color: #0d1b2a;
+  /* Navy blue */
   color: whitesmoke;
   height: 70px;
-  border-bottom: 1px inset #6c6e6f;
+  width: 100%;
+  z-index: 1000;
+  /* border-bottom: 1px inset #ffcc00; Amber yellow */
 }
 
 form {
@@ -288,7 +340,8 @@ input[type="number"] {
   box-sizing: border-box;
   background-color: transparent;
   color: whitesmoke;
-  border: 2px outset #180c08;
+  border: 2px outset #0d1b2a;
+  /* Navy blue */
 }
 
 input[type="email"]:focus,
@@ -320,8 +373,8 @@ input[type="email"]:-webkit-autofill:active {
 
 input[type="datetime-local"]:-webkit-autofill,
 input[type="datetime-local"]:-webkit-autofill:hover,
-input[type="datetime-local"]:-webkit-autofill:focus,
-input[type="datetime-local"]:-webkit-autofill:active {
+input[type="datetime-local"]:focus,
+input[type="datetime-local"]:active {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: whitesmoke !important;
 }
@@ -330,8 +383,10 @@ button {
   display: block;
   width: 100%;
   padding: 10px;
-  color: #ffffff;
-  background-color: #007bff;
+  color: #0d1b2a;
+  /* Navy blue */
+  background-color: #ffcc00;
+  /* Amber yellow */
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -339,7 +394,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #d18d00;
 }
 
 div .alert {
@@ -362,9 +417,35 @@ div .link {
   color: grey;
 }
 
+.card {
+  width: 80%;
+  padding: 0px 10px;
+  background-color: rgb(60, 3, 60);
+  color: #d18d00;
+}
+
+.card-header, .card-body {
+  padding: 3px 0 !important;
+  margin: 0 !important;
+}
+
+.card-body,  .list-group{
+ --bs-list-group-bg:black;
+}
+
+.list-group-item {
+  padding-left: 0px;
+  color: white;
+  border: none;
+}
+
+hr {
+  background: white;
+}
+
 /* Responsive Styles */
-/* @media (max-width: 600px) {
+@media (max-width: 600px) {
   .container {
-    max-width: 60%;
+    max-width: 80%;
   }
-} */
+}

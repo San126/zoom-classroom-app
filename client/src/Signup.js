@@ -18,7 +18,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post('http://localhost:3001/auth/signup', {
+            const response = await axios.post('http://localhost:3001/signup', {
                 username,
                 password
             }).then(() => {
@@ -92,7 +92,7 @@ const Signup = () => {
                                 <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Sign Up</button>
                             </div>
                         </form>
-                        <div class="link"><p><a href='/'>Login</a></p></div>
+                        <div className="link"><p><a href='/'>Login</a></p></div>
                     </div>
                 </div>
             </div>

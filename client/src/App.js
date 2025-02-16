@@ -1,61 +1,72 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import axios from 'axios';
-
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkAuth } from './actions/authActions';
 import ClassRoom from './ClassRoom';
 import LoginForm from './LoginForm';
 import Signup from './Signup';
-import ScheduleForm from './ScheduleForm';
-import NavbarContents from './NavbarContents';
-
 import './styles.css';
-
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [formVisibility, setFormVisibility] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
+  const [ariaHidden, setAriaHidden] = useState(false);
+  const dispatch = useDispatch();
+  const authState = useSelector((state) => state.auth);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!authState.isAuthenticated && location.pathname !== '/' && location.pathname !== '/signup') {
+      navigate('/');
+    }
+  }, [authState.isAuthenticated, location.pathname, navigate]);
 
   const setDetails = () => {
-    // console.log(JSON.parse(data));
-    // console.log(data)
-    // console.log('Data received from child:', localStorage.getItem('user'));
-    // localStorage.setItem('user', data);
-    // const convertedData = JSON.parse(localStorage.getItem('user'));
-    const data = (localStorage.getItem('user'));
-    setUserDetails(JSON.parse(data));
+    const data = localStorage.getItem('user');
+    if (data) {
+      return JSON.parse(data);
+    }
+    return {};
   };
 
-  const showLoginMenu = () => {
-    return (
-      <></>
-    );
-  }
+  const handleClose = () => {
+    setFormVisibility(false);
+    setAriaHidden(false);
+  };
 
-  // const logOut = async (e) => {
-  //   try {
-  //     e.preventDefault();
-  //     const response = await axios.post('http://localhost:3001/auth/logout', {})
-  //     .then(()=>{
-  //       alert("Logged out...");
-  //     });
-  //   }
-  //   catch (err) {
-  //     console.error('Error while login', err);
-  //   }
-  // }
+  const ProtectedRoute = ({ element: Component, ...rest }) => {
+    return authState.isAuthenticated ? (
+      <Component {...rest} />
+    ) : (
+      <Navigate to="/" />
+    );
+  };
 
   return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<LoginForm sendData={setDetails} />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/schedulelist" element={<ClassRoom props={userDetails} showModal={formVisibility} />} />
-          {/* <Route path="/schedule" element={(props)=>{<ClassRoom handleClose={handleClose} aria_hidden={aria_hidden} {...props} />}}/> */}
-
-        </Routes>
-      </Router>
+    <Routes>
+      <Route path="/" element={<LoginForm sendData={setDetails} />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/schedulelist"
+        element={
+          <ProtectedRoute
+            element={ClassRoom}
+            props={setDetails()}
+            showModal={formVisibility}
+            handleClose={handleClose}
+            aria_hidden={ariaHidden}
+          />
+        }
+      />
+      <Route
+        path="/schedule"
+        element={<ClassRoom handleClose={handleClose} aria_hidden={ariaHidden} />}
+      />
+    </Routes>
   );
 };
 

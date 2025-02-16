@@ -1,46 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-import axios from 'axios';
+import { login, checkAuth } from './actions/authActions'; // Import Redux actions
 import './styles.css';
 
 import NavbarContents from './NavbarContents';
 
-//demo login page not active
 const LoginForm = ({ sendData }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState(''); //success if successfully logged in logging in if trird loggin but not successful yet, unsuccessful if tried and failed 
-    const [userDetails, setUserDetails] = useState('');
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        try {
-            e.preventDefault();
-            setLoginStatus("logging in");
-            const response = await axios.post('http://localhost:3001/auth/login', {
-                username,
-                password
-            });
+    const authState = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        dispatch(checkAuth());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (authState.isAuthenticated) {
             navigate('/schedulelist');
-            setLoginStatus('success');
-            sendData(response.config.data);
-            localStorage.setItem('user', response.config.data);
-            console.log(response.config.data)
-            // setUserDetails(response.config.data);
-            console.log('Logged in successfully:', response.config.data);
+            sendData(authState.user);
         }
-        catch (error) {
-            if (error.response?.status === 401) {
-                setLoginStatus('unsuccessful');
-            }
-            else {
-                alert(error.response.data.message);
-            }
-            console.error('Error while login', error);
-        }
-    }
+    }, [authState.isAuthenticated, navigate, sendData, authState.user]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(login({ username, password }));
+    };
 
     return (
         <>
@@ -51,9 +39,7 @@ const LoginForm = ({ sendData }) => {
                         <h3 className="text-center">Login</h3>
                     </div>
                     <div className="card-body">
-                        {loginStatus === 'unsuccessful' && <div className='alert alert-danger'>
-                            Invalid username or password!
-                        </div>}
+                        {authState.error && <div className='alert alert-danger'>{authState.error}</div>}
                         <form onSubmit={handleSubmit}>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">Email address</label>
@@ -86,11 +72,13 @@ const LoginForm = ({ sendData }) => {
                                 </div>
                             </div>
                             <div className="d-grid">
-                                <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login</button>
+                                <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    {authState.loading ? 'Logging in...' : 'Login'}
+                                </button>
                             </div>
                         </form>
                     </div>
-                    <div class="link"><p><a href="./signup">Create an account</a></p></div>
+                    <div className="link"><p><a href="./signup">Create an account</a></p></div>
                 </div>
             </div>
         </>

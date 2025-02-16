@@ -11,22 +11,20 @@ const ConfirmModal = () => {
 
 
     return (
-        <div class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirm</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Schedule meet?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Ok</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
-                    </div>
+        <div className="modal-dialog" role="document">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title">Confirm</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div className="modal-body">
+                    <p>Schedule meet?</p>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-primary">Ok</button>
+                    <button type="button" className="btn btn-secondary" data-dismiss="modal">cancel</button>
                 </div>
             </div>
         </div>

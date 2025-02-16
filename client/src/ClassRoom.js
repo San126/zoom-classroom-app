@@ -1,64 +1,97 @@
 import React, { useEffect, useState } from 'react';
-import { upperFirst } from 'lodash';
+import { upperFirst, startCase } from 'lodash';
 import moment from 'moment';
 
 import NavbarContents from './NavbarContents';
+import ExpandableCard from './ExpandableCard';
+import { Form } from 'react-bootstrap';
 
-const ClassRoom = ({ props }) => {
+const ClassRoom = () => {
     const [classes, setClasses] = useState([]);
     const [formVisibility, setFormVisibility] = useState();
-    const details = (localStorage.getItem('user'));
+    const details = localStorage.getItem('user');
     const [data, setData] = useState(JSON.parse(details));
-    const { username = "" }  = data || {};
-    let count = 0;
+    const { username = "" } = data || {};
+    const [filter, setFilter] = useState('ongoing'); // 'all', 'past', 'ongoing', 'upcoming', 'today'
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     useEffect(() => {
         // Fetch data from the server
-        fetch(`http://localhost:3001/auth/schedulelist?userName=${username}`)
+        fetch(`http://localhost:3001/auth/schedulelist?userName=${username}&page=${currentPage}&limit=${itemsPerPage}`)
             .then(response => response.json())
-            .then(data => setClasses([...classes, ...data]))
+            .then(data => {
+                setClasses([...data?.scheduleList]);
+            })
             .catch(error => console.error('Error fetching data:', error));
-    }, [username]);
+    }, [username, currentPage, itemsPerPage]);
 
     const handleReloadPage = () => {
-        const details = (localStorage.getItem('user'));
+        const details = localStorage.getItem('user');
         setData(JSON.parse(details));
         window.location.reload();
     };
 
+    const getFilteredClasses = () => {
+        const now = moment();
+        return classes.filter(classItem => {
+            const classTime = moment(classItem.scheduledTime);
+            switch (filter) {
+                case 'past':
+                    return classTime.isBefore(now);
+                case 'ongoing':
+                    return classTime.isSame(now, 'day') && classTime.isBefore(now) && now.isBefore(classTime.add(classItem.duration, 'minutes'));
+                case 'upcoming':
+                    return classTime.isAfter(now);
+                case 'today':
+                    return classTime.isSame(now, 'day');
+                default:
+                    return true;
+            }
+        });
+    };
+
+    const ongoingMeetings = getFilteredClasses().filter(classItem => moment(classItem.scheduledTime).isSame(moment(), 'day'));
+
     return (
         <>
-            <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data}/>
+            <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} />
             <div className="scheduledetails">
-                <p class="welcome"><h3>Welcome {upperFirst(username?.split('@')[0])}</h3></p>
-                <table className="table table-striped table-sm" id="dataTable" >
-                    <thead className='thead'>
-                        <tr className='thead'>
-                            <th scope="col">Scheduled By</th>
-                            <th scope="col">Participants</th>
-                            <th scope="col">Zoom Link</th>
-                            <th scope="col">Scheduled Time</th>
-                        </tr>
-                    </thead>
-                    {classes.map((classItem) => (
-                        (moment('YYYY-MM-DDTHH:mm:ss').isAfter(moment(classItem.scheduledTime, 'YYYY-MM-DDTHH:mm:ss'))) !== true ?
-                            <tbody>
-                                <script>{count += 1}</script>
-                                <tr className='trow' index={classItem._id} data-toggle="modal">
-                                    <td>{classItem.scheduledBy}{' '}</td>
-                                    <td>{classItem.participants.studentEmails?.join(', ')},{' '}</td>
-                                    <td><a href={classItem.meetingUrl} target='_blank'>{classItem.meetingUrl}</a></td>
-                                    <td> {moment(classItem.scheduledTime).format('DD/MM/YYYY hh:mm A')}</td>
-                                </tr>
-                            </tbody> :
-                            <></>
-                    ))
-                    }
-                </table>
-                {(count === 0) &&
-                    <div className="alert alert-warning" role="alert">
-                        No data found!
-                    </div>}
+                <p className="welcome"><h3>Welcome {upperFirst(username?.split('@')[0])}</h3></p>
+                <hr style={{ height: "2px", backgroundColor: "white" }} />
+                <Form.Group style={{ marginBottom: "20px" }} controlId="meetingFilter">
+                    <Form.Label>Select Meeting Status</Form.Label>
+                    <Form.Control as="select" value={filter} onChange={(e) => setFilter(e.target.value)} className="mb-3">
+                        <option value="all">All Meetings</option>
+                        <option value="past">Past Meetings</option>
+                        <option value="ongoing">Ongoing Meetings</option>
+                        <option value="upcoming">Upcoming Meetings</option>
+                        <option value="today">Today's Meetings</option>
+                    </Form.Control>
+                </Form.Group>
+                {ongoingMeetings.length > 0 ? (
+                    <>
+                        <h4>Ongoing Meetings</h4>
+                        {ongoingMeetings.map((classItem, index) => (
+                            <ExpandableCard key={index} {...classItem} />
+                        ))}
+                    </>
+                ) : (
+                    <>
+                        <h4>{startCase(filter)} Meetings</h4>
+                        {getFilteredClasses().length > 0 ? (
+                            <>
+                                {getFilteredClasses().map((classItem, index) => (
+                                    <ExpandableCard key={index} {...classItem} />
+                                ))}
+                            </>
+                        ) : (
+                            <div className="alert alert-warning" role="alert">
+                                No data found!
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </>
     );
