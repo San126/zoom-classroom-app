@@ -7,7 +7,7 @@ Alert
 ![image](https://github.com/San126/zoom-classroom-app/assets/55818344/b3367c38-edc7-4167-a39c-c8752840eae6)
 Login
 
-![image](https://github.com/San126/zoom-classroom-app/assets/55818344/30fd9b53-924c-4700-89ea-8506a91a86e8)
+![image](https://github.com/user-attachments/assets/4581fd0e-1dc5-4b78-bdc1-0c753ff1a9d9)
 List page
 
 ![image](https://github.com/San126/zoom-classroom-app/assets/55818344/4aa5421f-6126-46a8-a304-28e66fe80016)
