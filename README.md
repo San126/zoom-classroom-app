@@ -10,5 +10,5 @@ Login
 ![image](https://github.com/user-attachments/assets/4581fd0e-1dc5-4b78-bdc1-0c753ff1a9d9)
 List page
 
-![image](https://github.com/San126/zoom-classroom-app/assets/55818344/4aa5421f-6126-46a8-a304-28e66fe80016)
+![image](https://github.com/user-attachments/assets/0ee3ec8b-4ba2-4868-a69f-2f7275680631)
 Schedule Modal
