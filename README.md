@@ -55,4 +55,3 @@ This application simplifies scheduling and managing Zoom meetings, especially fo
 
 Contributions are welcome! Please feel free to submit pull requests or open issues.
 
-## License
